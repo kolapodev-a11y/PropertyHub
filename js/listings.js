@@ -4,9 +4,9 @@
 
 import { db, storage } from "./firebase-config.js";
 import { getCurrentUser } from "./auth.js";
+import { API_BASE } from "./app-config.js";
 import {
   collection,
-  addDoc,
   getDocs,
   getDoc,
   doc,
@@ -41,16 +41,28 @@ export async function addListing(data) {
   const user = getCurrentUser();
   if (!user) throw new Error("Must be logged in to post a listing.");
 
-  const docRef = await addDoc(collection(db, "listings"), {
-    ...data,
-    ownerId:    user.uid,
-    ownerName:  user.displayName || user.email,
-    ownerEmail: user.email,
-    ownerPhoto: user.photoURL || null,
-    createdAt:  serverTimestamp(),
-    status:     "active"
+  const token = await user.getIdToken();
+
+  const res = await fetch(`${API_BASE}/api/listings`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
   });
-  return docRef.id;
+
+  if (!res.ok) {
+    let msg = "Failed to create listing";
+    try {
+      const j = await res.json();
+      msg = j.error || msg;
+    } catch (e) {}
+    throw new Error(msg);
+  }
+
+  const out = await res.json();
+  return out.id;
 }
 
 // ─── Get All Listings (real-time) ──────────────────────────
@@ -85,7 +97,25 @@ export async function getListingById(id) {
 export async function deleteListing(id) {
   const user = getCurrentUser();
   if (!user) throw new Error("Must be logged in.");
-  await deleteDoc(doc(db, "listings", id));
+
+  const token = await user.getIdToken();
+  const res = await fetch(`${API_BASE}/api/listings/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) {
+    let msg = "Failed to delete listing";
+    try {
+      const j = await res.json();
+      msg = j.error || msg;
+    } catch (e) {}
+    throw new Error(msg);
+  }
+
+  return true;
 }
 
 // ─── Get Latest Listings for Homepage (no real-time) ───────
