@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — PropertyHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-page">
+
+<!-- LEFT PANEL -->
+<div class="auth-left">
+  <div class="auth-left-content">
+    <a href="index.html" class="auth-left-logo">
+      <svg viewBox="0 0 40 40" fill="none" style="width:36px;height:36px;"><rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.2)"/><path d="M20 8L8 18V32H16V24H24V32H32V18L20 8Z" fill="white"/></svg>
+      Property<span>Hub</span>
+    </a>
+    <h2>Welcome Back!</h2>
+    <p>Sign in to manage your listings, connect with buyers and sellers, and explore properties on the map.</p>
+    <ul class="auth-features">
+      <li><span class="check">✓</span> Post unlimited listings</li>
+      <li><span class="check">✓</span> Upload photos from device</li>
+      <li><span class="check">✓</span> Location pinned on Google Maps</li>
+      <li><span class="check">✓</span> Connect with buyers directly</li>
+    </ul>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="auth-right">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <h1>Sign In</h1>
+      <p>Don't have an account? <a href="register.html">Create one free</a></p>
+    </div>
+
+    <!-- Alert -->
+    <div class="auth-alert auth-alert-error" id="login-alert"></div>
+
+    <!-- Google Sign In -->
+    <button class="btn-google" id="google-signin-btn">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">or sign in with email</div>
+
+    <!-- Email Form -->
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="login-email">Email Address</label>
+        <div class="input-with-icon">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+          <input type="email" id="login-email" class="form-input" placeholder="you@email.com" required />
+        </div>
+        <div class="form-error" id="email-error">Please enter a valid email.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">
+          Password
+          <a href="#" style="font-weight:400; float:right; color:var(--primary); font-size:.8rem;">Forgot password?</a>
+        </label>
+        <div class="input-with-icon">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required />
+          <button type="button" class="toggle-password" id="toggle-pw">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="form-error" id="pw-error">Password is required.</div>
+      </div>
+
+      <button type="submit" class="btn-auth" id="login-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign In
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      New to PropertyHub? <a href="register.html">Create a free account</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { loginWithEmail, loginWithGoogle, watchAuthState } from "./js/auth.js";
+
+  // Redirect if already logged in
+  watchAuthState((user) => {
+    if (user) window.location.href = "index.html";
+  });
+
+  const alertEl  = document.getElementById("login-alert");
+  const loginBtn = document.getElementById("login-btn");
+
+  function showAlert(msg) {
+    alertEl.textContent = msg;
+    alertEl.classList.add("visible");
+  }
+  function hideAlert() { alertEl.classList.remove("visible"); }
+
+  // Toggle password visibility
+  const pwInput  = document.getElementById("login-password");
+  const eyeToggle = document.getElementById("toggle-pw");
+  const eyeIcon  = document.getElementById("eye-icon");
+  eyeToggle.addEventListener("click", () => {
+    if (pwInput.type === "password") {
+      pwInput.type = "text";
+      eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+    } else {
+      pwInput.type = "password";
+      eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    }
+  });
+
+  // Email/password login
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideAlert();
+    const email    = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+    if (!email || !password) { showAlert("Please enter email and password."); return; }
+
+    loginBtn.disabled    = true;
+    loginBtn.textContent = "Signing in…";
+    try {
+      await loginWithEmail(email, password);
+      window.location.href = "index.html";
+    } catch (err) {
+      let msg = "Login failed. Please check your credentials.";
+      if (err.code === "auth/user-not-found")   msg = "No account found with this email.";
+      if (err.code === "auth/wrong-password")    msg = "Incorrect password.";
+      if (err.code === "auth/invalid-email")     msg = "Invalid email address.";
+      if (err.code === "auth/too-many-requests") msg = "Too many attempts. Try again later.";
+      showAlert(msg);
+      loginBtn.disabled    = false;
+      loginBtn.innerHTML   = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Sign In`;
+    }
+  });
+
+  // Google sign in
+  document.getElementById("google-signin-btn").addEventListener("click", async () => {
+    hideAlert();
+    try {
+      await loginWithGoogle();
+      window.location.href = "index.html";
+    } catch (err) {
+      showAlert("Google sign-in failed. Please try again.");
+    }
+  });
+</script>
+</body>
+</html>

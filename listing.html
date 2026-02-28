@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listing Details — PropertyHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/listing.css" />
+  <!-- Google Maps API — replace YOUR_MAPS_API_KEY -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_MAPS_API_KEY&libraries=places&callback=initMapsCallback"
+    defer async>
+  </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#006AFF"/><path d="M20 8L8 18V32H16V24H24V32H32V18L20 8Z" fill="white"/></svg>
+      Property<span>Hub</span>
+    </a>
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle"><span></span><span></span><span></span></button>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="buy-phone.html">📱 Buy Phone</a></li>
+      <li><a href="sell-land.html">🌍 Sell Land</a></li>
+      <li><a href="rent-house.html">🏠 Rent House</a></li>
+      <li><a href="sell-house.html">🏡 Sell House</a></li>
+    </ul>
+    <div class="nav-auth">
+      <a href="login.html"    class="btn-outline" id="nav-login">Login</a>
+      <a href="register.html" class="btn-primary"  id="nav-register">Sign Up</a>
+      <div class="user-menu" id="nav-user-menu" style="display:none;">
+        <div class="user-avatar-wrap"><img id="nav-avatar" src="" alt="avatar" /></div>
+        <span id="nav-username" class="user-name"></span>
+        <button id="nav-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- LOADING STATE -->
+<div id="page-loading" style="display:flex; justify-content:center; align-items:center; min-height:60vh;">
+  <div class="loading-spinner"><div class="spinner"></div><p>Loading listing…</p></div>
+</div>
+
+<!-- LISTING DETAIL -->
+<div class="detail-page" id="detail-content" style="display:none;">
+
+  <!-- Back Button -->
+  <button class="detail-back" id="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to listings
+  </button>
+
+  <div class="detail-grid">
+
+    <!-- LEFT: Gallery + Map -->
+    <div>
+      <!-- Main Image -->
+      <div class="gallery-main">
+        <img id="gallery-main-img" src="" alt="listing" />
+      </div>
+      <!-- Thumbnails -->
+      <div class="gallery-thumbs" id="gallery-thumbs"></div>
+
+      <!-- Full Description (desktop) -->
+      <div style="margin-top:28px; background:white; border-radius:var(--radius); padding:24px; border:1px solid var(--border);">
+        <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:12px;">📝 Description</h2>
+        <p id="detail-desc" style="color:var(--text-muted); line-height:1.8; font-size:.93rem; white-space:pre-wrap;"></p>
+      </div>
+
+      <!-- Map Section -->
+      <div class="map-section">
+        <h2>📍 Location on Map</h2>
+        <p id="no-map-msg" style="display:none; color:var(--text-muted); font-size:.88rem; padding:12px 0;">Location not specified for this listing.</p>
+        <div id="detail-map"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Info Card -->
+    <div>
+      <div class="detail-card">
+
+        <div id="detail-category-badge" class="detail-category"></div>
+        <h1 class="detail-title" id="detail-title"></h1>
+        <div class="detail-price" id="detail-price"></div>
+
+        <!-- Location -->
+        <div class="detail-location" id="detail-location-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="detail-location"></span>
+        </div>
+
+        <!-- Meta chips -->
+        <div class="detail-meta" id="detail-meta"></div>
+
+        <!-- Seller Box -->
+        <div class="seller-box">
+          <img id="seller-avatar" src="" alt="Seller" class="seller-avatar" />
+          <div>
+            <div class="seller-name" id="seller-name">Loading…</div>
+            <div class="seller-label">Listed by</div>
+          </div>
+        </div>
+
+        <!-- Contact Button -->
+        <a id="contact-btn" href="#" class="btn-contact">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.61 4.5 2 2 0 0 1 3.6 2.28h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.08 6.08l1-1a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Contact Seller
+        </a>
+
+        <!-- Share Button -->
+        <button class="btn-share" id="share-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share Listing
+        </button>
+
+        <!-- Posted Date -->
+        <p id="detail-date" style="text-align:center; font-size:.75rem; color:var(--text-muted); margin-top:14px;"></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOT FOUND -->
+<div id="not-found" style="display:none; text-align:center; padding:80px 24px;">
+  <div style="font-size:3rem; margin-bottom:16px;">😕</div>
+  <h2>Listing Not Found</h2>
+  <p style="color:var(--text-muted); margin:8px 0 24px;">This listing may have been removed or the link is invalid.</p>
+  <a href="index.html" class="btn-primary">Go Back Home</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <a href="index.html" class="nav-logo" style="color:white;">
+        <svg viewBox="0 0 40 40" fill="none" style="width:28px;height:28px;"><rect width="40" height="40" rx="10" fill="#006AFF"/><path d="M20 8L8 18V32H16V24H24V32H32V18L20 8Z" fill="white"/></svg>
+        Property<span style="color:#FFD166">Hub</span>
+      </a>
+      <span style="font-size:.82rem; color:rgba(255,255,255,.5);">© 2025 PropertyHub</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.initMapsCallback = function() {
+    window.mapsReady = true;
+    if (window.pendingDetailMap) window.pendingDetailMap();
+  };
+</script>
+
+<script type="module">
+  import { setupNavAuth } from "./js/auth.js";
+  import { getListingById, formatPrice } from "./js/listings.js";
+
+  setupNavAuth();
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const navMenu = document.getElementById("nav-menu");
+  if (toggle) toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const listingId = urlParams.get("id");
+
+  const loading  = document.getElementById("page-loading");
+  const content  = document.getElementById("detail-content");
+  const notFound = document.getElementById("not-found");
+
+  if (!listingId) {
+    loading.style.display  = "none";
+    notFound.style.display = "block";
+  } else {
+    try {
+      const listing = await getListingById(listingId);
+      if (!listing) {
+        loading.style.display  = "none";
+        notFound.style.display = "block";
+      } else {
+        loading.style.display = "none";
+        content.style.display = "block";
+        renderListing(listing);
+      }
+    } catch (err) {
+      console.error(err);
+      loading.style.display  = "none";
+      notFound.style.display = "block";
+    }
+  }
+
+  function renderListing(listing) {
+    // ── Set page title
+    document.title = `${listing.title} — PropertyHub`;
+
+    // ── Category badge
+    const catMap = { phone:"📱 Phone", land:"🌍 Land", rent:"🏠 Rent", sell_house:"🏡 House" };
+    document.getElementById("detail-category-badge").textContent = catMap[listing.category] || listing.category;
+
+    // ── Title & Price
+    document.getElementById("detail-title").textContent = listing.title;
+    document.getElementById("detail-price").textContent = formatPrice(listing.price, listing.category);
+
+    // ── Location
+    if (listing.locationName) {
+      document.getElementById("detail-location").textContent = listing.locationName;
+    } else {
+      document.getElementById("detail-location-wrap").style.display = "none";
+    }
+
+    // ── Description
+    document.getElementById("detail-desc").textContent = listing.description || "No description provided.";
+
+    // ── Meta chips
+    const meta = document.getElementById("detail-meta");
+    if (listing.contact) {
+      meta.innerHTML += `<span class="meta-chip">📞 ${listing.contact}</span>`;
+    }
+    if (listing.category) {
+      meta.innerHTML += `<span class="meta-chip">🏷️ ${catMap[listing.category] || listing.category}</span>`;
+    }
+    meta.innerHTML += `<span class="meta-chip">✅ Active</span>`;
+
+    // ── Seller info
+    document.getElementById("seller-name").textContent  = listing.ownerName || "Anonymous";
+    document.getElementById("seller-avatar").src = listing.ownerPhoto
+      || `https://ui-avatars.com/api/?name=${encodeURIComponent(listing.ownerName || "U")}&background=006AFF&color=fff&size=48`;
+
+    // ── Contact button
+    const contactBtn = document.getElementById("contact-btn");
+    if (listing.contact) {
+      const phone = listing.contact.replace(/\s+/g, "");
+      contactBtn.href = `https://wa.me/${phone.replace("+","")}?text=${encodeURIComponent(`Hi, I'm interested in your listing: ${listing.title} on PropertyHub.`)}`;
+      contactBtn.target = "_blank";
+    } else if (listing.ownerEmail) {
+      contactBtn.href = `mailto:${listing.ownerEmail}?subject=Interested in: ${encodeURIComponent(listing.title)}`;
+    } else {
+      contactBtn.style.display = "none";
+    }
+
+    // ── Date
+    const dateEl = document.getElementById("detail-date");
+    if (listing.createdAt && listing.createdAt.toDate) {
+      dateEl.textContent = `Posted on ${listing.createdAt.toDate().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}`;
+    }
+
+    // ── Gallery
+    const images = listing.images && listing.images.length > 0
+      ? listing.images
+      : ["https://placehold.co/800x500/e8f0fe/006AFF?text=No+Image"];
+
+    const mainImg = document.getElementById("gallery-main-img");
+    mainImg.src   = images[0];
+    mainImg.alt   = listing.title;
+
+    const thumbsEl = document.getElementById("gallery-thumbs");
+    if (images.length > 1) {
+      thumbsEl.innerHTML = images.map((url, i) =>
+        `<img src="${url}" alt="Photo ${i+1}" class="${i===0?'active':''}" data-index="${i}" />`
+      ).join("");
+      thumbsEl.querySelectorAll("img").forEach(img => {
+        img.addEventListener("click", () => {
+          mainImg.src = img.src;
+          thumbsEl.querySelectorAll("img").forEach(t => t.classList.remove("active"));
+          img.classList.add("active");
+        });
+      });
+    }
+
+    // ── Back button
+    document.getElementById("back-btn").addEventListener("click", () => history.back());
+
+    // ── Share
+    document.getElementById("share-btn").addEventListener("click", async () => {
+      const url = window.location.href;
+      if (navigator.share) {
+        await navigator.share({ title: listing.title, url });
+      } else {
+        navigator.clipboard.writeText(url);
+        showToast("Link copied to clipboard!", "success");
+      }
+    });
+
+    // ── Google Map
+    function initDetailMap() {
+      const mapEl = document.getElementById("detail-map");
+      if (!mapEl || !window.google) return;
+
+      if (!listing.lat || !listing.lng) {
+        mapEl.style.display = "none";
+        document.getElementById("no-map-msg").style.display = "block";
+        return;
+      }
+
+      const position = { lat: parseFloat(listing.lat), lng: parseFloat(listing.lng) };
+      const map = new google.maps.Map(mapEl, {
+        center: position, zoom: 15,
+        mapTypeControl: true, streetViewControl: true, fullscreenControl: true
+      });
+
+      const marker = new google.maps.Marker({
+        map, position,
+        title: listing.locationName || listing.title,
+        animation: google.maps.Animation.DROP
+      });
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: `
+          <div style="padding:6px 4px;">
+            <div style="font-weight:700;color:#006AFF;font-size:14px;">${listing.title}</div>
+            <div style="font-size:12px;color:#666;margin-top:4px;">📍 ${listing.locationName || "Listed on PropertyHub"}</div>
+            <div style="font-size:13px;font-weight:600;color:#FF6B35;margin-top:4px;">${formatPrice(listing.price, listing.category)}</div>
+          </div>`
+      });
+      infoWindow.open(map, marker);
+    }
+
+    if (window.mapsReady) {
+      initDetailMap();
+    } else {
+      window.pendingDetailMap = initDetailMap;
+    }
+  }
+
+  // Toast helper
+  function showToast(message, type = "info") {
+    const existing = document.querySelector(".toast");
+    if (existing) existing.remove();
+    const toast = document.createElement("div");
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add("toast-visible"), 50);
+    setTimeout(() => { toast.classList.remove("toast-visible"); setTimeout(() => toast.remove(), 400); }, 3500);
+  }
+
+  window.showToast = showToast;
+</script>
+</body>
+</html>

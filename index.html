@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PropertyHub — Buy, Rent & Sell Easily</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" />
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="#006AFF"/>
+        <path d="M20 8L8 18V32H16V24H24V32H32V18L20 8Z" fill="white"/>
+      </svg>
+      Property<span>Hub</span>
+    </a>
+
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="buy-phone.html">📱 Buy Phone</a></li>
+      <li><a href="sell-land.html">🌍 Sell Land</a></li>
+      <li><a href="rent-house.html">🏠 Rent House</a></li>
+      <li><a href="sell-house.html">🏡 Sell House</a></li>
+    </ul>
+
+    <div class="nav-auth">
+      <a href="login.html"    class="btn-outline" id="nav-login">Login</a>
+      <a href="register.html" class="btn-primary"  id="nav-register">Sign Up</a>
+      <div class="user-menu" id="nav-user-menu" style="display:none;">
+        <div class="user-avatar-wrap">
+          <img id="nav-avatar" src="" alt="avatar" />
+        </div>
+        <span id="nav-username" class="user-name"></span>
+        <button id="nav-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Trusted by thousands of users</div>
+    <h1>Find Your Perfect Home, Land or Device</h1>
+    <p>Browse thousands of properties and second-hand phones. List yours in minutes.</p>
+
+    <form class="hero-search" id="hero-search-form">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="hero-search-input" placeholder="Search properties, phones, location…" />
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="stat-listings">—</span><span class="stat-label">Active Listings</span></div>
+      <div class="stat"><span class="stat-num" id="stat-users">—</span><span class="stat-label">Users</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Categories</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CATEGORY CARDS ═══════════════ -->
+<div class="categories-section">
+  <div class="categories-grid">
+    <a href="buy-phone.html" class="cat-card">
+      <span class="cat-icon">📱</span>
+      <div class="cat-title">Buy Phone</div>
+      <div class="cat-count">Second-hand phones</div>
+    </a>
+    <a href="sell-land.html" class="cat-card">
+      <span class="cat-icon">🌍</span>
+      <div class="cat-title">Sell Land</div>
+      <div class="cat-count">Land for sale</div>
+    </a>
+    <a href="rent-house.html" class="cat-card">
+      <span class="cat-icon">🏠</span>
+      <div class="cat-title">Rent House</div>
+      <div class="cat-count">Monthly rentals</div>
+    </a>
+    <a href="sell-house.html" class="cat-card">
+      <span class="cat-icon">🏡</span>
+      <div class="cat-title">Sell House</div>
+      <div class="cat-count">Homes for sale</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════ FEATURED LISTINGS ═══════════════ -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Featured <span>Listings</span></h2>
+    <a href="sell-house.html" class="btn-outline" style="font-size:.85rem;padding:8px 16px;">View All →</a>
+  </div>
+  <div class="listings-grid" id="featured-grid">
+    <div class="loading-spinner"><div class="spinner"></div><p>Loading listings…</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section style="background:var(--primary-light); padding: 64px 24px;">
+  <div class="container">
+    <h2 class="section-title text-center" style="margin-bottom:40px; justify-content:center;">How It <span>Works</span></h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:28px; text-align:center;">
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">✍️</div>
+        <h3 style="font-weight:700; margin-bottom:6px;">1. Create Account</h3>
+        <p style="color:var(--text-muted); font-size:.88rem;">Sign up with email or Google in seconds.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">📸</div>
+        <h3 style="font-weight:700; margin-bottom:6px;">2. Post Your Listing</h3>
+        <p style="color:var(--text-muted); font-size:.88rem;">Upload photos, set price, pick location on map.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">📍</div>
+        <h3 style="font-weight:700; margin-bottom:6px;">3. Buyers Find You</h3>
+        <p style="color:var(--text-muted); font-size:.88rem;">Your listing appears on the map for all to see.</p>
+      </div>
+      <div>
+        <div style="font-size:2.5rem; margin-bottom:12px;">🤝</div>
+        <h3 style="font-weight:700; margin-bottom:6px;">4. Connect & Deal</h3>
+        <p style="color:var(--text-muted); font-size:.88rem;">Contact the seller and close the deal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="color:white; margin-bottom:12px; display:inline-flex;">
+          <svg viewBox="0 0 40 40" fill="none" style="width:28px;height:28px;"><rect width="40" height="40" rx="10" fill="#006AFF"/><path d="M20 8L8 18V32H16V24H24V32H32V18L20 8Z" fill="white"/></svg>
+          Property<span style="color:#FFD166">Hub</span>
+        </a>
+        <p>Your trusted marketplace for buying, selling, and renting properties and second-hand phones.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="buy-phone.html">Buy Phone</a></li>
+          <li><a href="sell-land.html">Sell Land</a></li>
+          <li><a href="rent-house.html">Rent House</a></li>
+          <li><a href="sell-house.html">Sell House</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register.html">Register</a></li>
+          <li><a href="upload.html">Post Listing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 PropertyHub. All rights reserved.</span>
+      <span>Built with ❤️ by PropertyHub Team</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script type="module">
+  import { setupNavAuth } from "./js/auth.js";
+  import { getListingsRealtime, renderCard } from "./js/listings.js";
+
+  // Setup nav auth
+  setupNavAuth();
+
+  // Mobile menu
+  const toggle  = document.getElementById("mobile-menu-toggle");
+  const navMenu = document.getElementById("nav-menu");
+  if (toggle) toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+
+  // Hero search
+  const searchForm = document.getElementById("hero-search-form");
+  if (searchForm) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = document.getElementById("hero-search-input").value.trim();
+      if (q) window.location.href = `sell-house.html?q=${encodeURIComponent(q)}`;
+    });
+  }
+
+  // Load featured listings
+  const grid = document.getElementById("featured-grid");
+  if (grid) {
+    const unsubscribe = getListingsRealtime(null, (listings) => {
+      if (listings.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <span class="empty-icon">🏠</span>
+            <h3>No listings yet</h3>
+            <p>Be the first to post a listing!</p>
+            <a href="register.html" class="btn-primary" style="margin-top:14px; display:inline-flex;">Get Started</a>
+          </div>`;
+        document.getElementById("stat-listings").textContent = "0";
+        return;
+      }
+      const top8 = listings.slice(0, 8);
+      grid.innerHTML = top8.map(renderCard).join("");
+      document.getElementById("stat-listings").textContent = listings.length + "+";
+    });
+  }
+
+  // Simulate user count
+  document.getElementById("stat-users").textContent = "500+";
+</script>
+</body>
+</html>
