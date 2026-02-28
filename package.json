@@ -1,0 +1,25 @@
+{
+  "name": "propertyhub",
+  "version": "1.0.0",
+  "description": "PropertyHub \u2014 Zillow-like Real Estate & Phone Marketplace",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "live-server --port=5500 --open=index.html",
+    "deploy": "firebase deploy --only hosting",
+    "backend": "npm --prefix backend install && npm --prefix backend run dev"
+  },
+  "keywords": [
+    "real-estate",
+    "marketplace",
+    "firebase",
+    "google-maps"
+  ],
+  "author": "PropertyHub Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0",
+    "live-server": "^1.2.2",
+    "firebase-tools": "^13.0.0"
+  }
+}

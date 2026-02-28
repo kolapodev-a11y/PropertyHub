@@ -346,3 +346,55 @@ MIT License — Free to use, modify, and distribute.
 ---
 
 *Built with ❤️ using Firebase, Google Maps API & Vanilla JavaScript*
+
+---
+
+# 🔌 Backend (Express) Setup (Recommended)
+
+This repo now includes an **Express backend** (`/backend`) that:
+- Verifies Firebase ID tokens on the server
+- Creates/deletes listings securely using **Firebase Admin SDK**
+
+Firebase Auth ID token verification is the recommended way to securely identify a signed-in user on your own backend [Source](https://firebase.google.com/docs/auth/admin/verify-id-tokens).
+
+## 1) Create a Firebase Service Account key
+Firebase Console → Project settings → **Service accounts** → **Generate new private key**.
+
+Save it as:
+```
+backend/serviceAccountKey.json
+```
+
+## 2) Backend install & run
+From the project root:
+```bash
+cd backend
+npm install
+cp .env.example .env
+# edit .env and confirm GOOGLE_APPLICATION_CREDENTIALS path
+npm run dev
+```
+Backend runs at: `http://localhost:5001`
+
+## 3) Frontend run
+Use Live Server (VS Code) or:
+```bash
+npm install
+npm run dev
+```
+
+## 4) Firestore Rules (IMPORTANT)
+If you use the Express backend for writes, lock Firestore writes from the client:
+
+```js
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /listings/{id} {
+      allow read: if true;
+      allow write: if false; // only backend (Admin SDK) writes
+    }
+  }
+}
+```
+
